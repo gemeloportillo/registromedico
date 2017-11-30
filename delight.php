@@ -461,10 +461,10 @@ function showGuestUserForm() {
   	<body id="page" class="w3-light-grey w3-content" style="max-width:1600px">
   		<div class="container">
   		<div id="logo">
-  			<img src="imgs/incmnsz.png">
+  			<img src="imgs/logo.png">
   		</div>
   			<form class="form-signin" action="" method="post" accept-charset="utf-8">
-  			  <h2 class="form-signin-heading">Bienvenido</h2>
+  			  <!--<h2 class="form-signin-heading">Bienvenido</h2>-->
   				<input type="hidden" name="action" value="login" />
   				<input type="hidden" name="remember" value="0" />
   				<label for="inputEmail" class="sr-only">Correo electrónico</label>
