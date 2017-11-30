@@ -1,25 +1,55 @@
 <?php require_once('connections/rcpip.php'); 
 require_once('delight.php');
 
-// enable error reporting
-//\error_reporting(\E_ALL);
-//\ini_set('display_errors', 'stdout');
-
-// enable assertions
-//\ini_set('assert.active', 1);
-//@\ini_set('zend.assertions', 1);
-//\ini_set('assert.exception', 1);
-/*
-\header('Content-type: text/html; charset=utf-8');
-require __DIR__.'/vendor/autoload.php';
-$db = new \PDO('mysql:dbname=rcpip;host=localhost;charset=utf8mb4', $dbuser_rcpip, $dbpass_rcpip);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);*/
-// or
-// $db = new \PDO('sqlite:../Databases/php_auth.sqlite');
-
 $auth = new \Delight\Auth\Auth($db);
 $result = \processRequestData($auth);
+
+/* define variables and set to empty values
+  Formularios (Medicos) para recuperar las variables (globales)
+***************************************************************/
+$nameErr = $emailErr = $especialErr = $celularErr = "";
+$doctorName = $doctorEmail = $especialidad = $celular = "";
+// Estrategia de prueba para pasar variables de los formularios
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["doctorName"])) {
+    $nameErr = "El nombre es obligatorio";
+  } else {
+    $doctorName = test_input($_POST["doctorName"]);
+    // check if name only contains letters and whitespace
+    if (!preg_match("/^[a-zA-Z ]*$/",$doctorName)) {
+      $nameErr = "";
+    }
+  }
+  
+  if (empty($_POST["doctorEmail"])) {
+    $emailErr = "El correo electrónico es obligatorio";
+  } else {
+    $doctorEmail = test_input($_POST["doctorEmail"]);
+    // check if e-mail address is well-formed
+    if (!filter_var($doctorEmail, FILTER_VALIDATE_EMAIL)) {
+      $emailErr = "El correo electrónico no es válido";
+    }
+  }
+
+  if (empty($_POST["especialidad"])) {
+    $especialidad = "";
+  } else {
+    $especialidad = test_input($_POST["especialidad"]);
+  }
+
+  if (empty($_POST["celular"])) {
+    $celularErr = "El celular es obligatorio";
+  } else {
+    $celular = test_input($_POST["celular"]);
+  }
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
 
 \showGeneralForm();
 //\showDebugData($auth, $result);

@@ -111,14 +111,14 @@ function showGeneralForm() {
     //echo '<meta charset="utf-8">';
     echo '<html>
     <head>
-    <meta http-equiv="content-type" content="text/html>
-    <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/custom.css">
+    	<meta http-equiv="content-type" content="text/html>
+    	<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/custom.css">
 	</head>
 	<body id="page" class=" w3-light-grey w3-content">
 
@@ -258,29 +258,18 @@ function showAuthenticatedUserForm(\Delight\Auth\Auth $auth) {
 			
 			<span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
 			<div class="w3-container">
-				<h1 class="titulo"><b>Registro clinco para proyectos de investigacion y protocolos</b></h1>
+				<h1 class="titulo"><b>Registro clínico para proyectos de investigación y protocolos</b></h1>
 				<div class=" w3-section w3-bottombar w3-padding-16">
 				  <span class="w3-margin-right"></span> 
-				  <button class="w3-button w3-black">Ingresos</button>
+				  <button class="w3-button w3-green">Ingresos</button>
 				  <div class="menuDinamico">
-					  <button id="link1" data-page="page1" class="w3-button w3-white"><i class="fa fa-stethoscope   w3-margin-right"></i>Medicos</button>
-					  <button id="link2" data-page="page2" class="w3-button w3-white w3-hide-small"><i class="fa fa-user-o w3-margin-right"></i>Usuarios</button>
-					  <button id="link3" data-page="page3" class="w3-button w3-white w3-hide-small"><i class="fa fa-file-text-o w3-margin-right"></i>Protocolos</button>
+					  <button id="link1" data-page="page1" class="w3-button w3-orange"><i class="fa fa-stethoscope   w3-margin-right"></i>Médicos</button>
+					  <button id="link2" data-page="page2" class="w3-button w3-purple w3-hide-small"><i class="fa fa-user-o w3-margin-right"></i>Usuarios</button>
+					  <button id="link3" data-page="page3" class="w3-button w3-blue w3-hide-small"><i class="fa fa-file-text-o w3-margin-right"></i>Protocolos</button>
 				  </div>
 				</div>
 			</div>
 		</header>
-		<!--
-		<div class="w3-row-padding w3-padding-16" id="about">
-			<div class="w3-col m6">
-			  <img src="/w3images/avatar_g.jpg" alt="Me" style="width:100%">
-			</div>
-			<div class="w3-col m6">
-			  <img src="/w3images/me2.jpg" alt="Me" style="width:100%">
-			</div>
-		</div>
-		-->
-
 		';
 }
 
@@ -292,20 +281,21 @@ function showMedicosForm() {
 				<div class="w3-container w3-whitegray">
 					<h2>Ingresar medico</h2>
 					<div class="w3-row-padding" style="margin:8 -16px">
-						<form action="/action_page.php">
+						<form action="" method="post" accept-charset="utf-8">
 							<div class="w3-third w3-margin-bottom">
-								<label for="doctorNombre">Nombre del medico</label>
-								<input type="text" id="dname" name="doctorNombre" placeholder="Su nombre completo..">    
+								<label for="doctorName">Nombre del medico</label>
+								<input type="text" id="dname" name="doctorName" placeholder="Su nombre completo..">    
 							</div>
 							<div class="w3-third w3-margin-bottom">
-								<label for="doctorArea">Especialidad</label>
-								<input type="text" id="darea" name="doctorArea" placeholder="Su area de especialidad..">   
+								<label for="especialidad">Especialidad</label>
+								<input type="text" id="darea" name="especialidad" placeholder="Su area de especialidad..">   
 							</div>
 							<div class="w3-third">
-								<label for="doctorCel">Celular</label>
-								<input type="text" id="dcel" name="doctorCel" placeholder="Su telefono de celular..">
+								<label for="celular">Celular</label>
+								<input type="text" id="dcel" name="celular" placeholder="Su telefono de celular..">
 							</div>
-							<input class="w3-button w3-teal w3-padding-large w3-hover-black" type="submit" value="Registro nuevo  ">
+							<input type="hidden" name="action" value="addMedicos" />
+							<input class="w3-button w3-teal w3-padding-large w3-hover-black" type="submit" value="Registro nuevo">
 						</form>
 					</div>
 				</div>	
@@ -320,7 +310,34 @@ function showMedicosForm() {
 }
 
 function showMedicosUpdateForm() {
+	global $nameErr, $emailErr, $especialErr, $celularErr, $doctorName, $doctorEmail, $especialidad, $celular;
+	//$nameErr = $emailErr = $especialErr = $celularErr = "";
+	//$doctorName = $email = $especialidad = $celular = "";
+
 	// Actualiza la información de los médicos
+	echo '
+		<div class="w3-row-padding" style="margin:8 -16px">
+			<form id="updateMedicos" action="'. htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" accept-charset="utf-8">
+				<div class="w3-third w3-margin-bottom">
+					<label for="doctorName">Nombre del médico</label>
+					<input type="text" id="dname" name="doctorName" placeholder="Su nombre completo.." value="'.$doctorName.'"><span class="error"> * '.$nameErr.'</span>
+				</div>
+				<div class="w3-third w3-margin-bottom">
+					<label for="especialidad">Especialidad</label>
+					<input type="text" id="darea" name="especialidad" placeholder="Su área de especialidad.." value="'.$especialidad.'">
+				</div>
+				<div class="w3-third">
+					<label for="doctorCel">Celular</label>
+					<input type="text" id="doctorCel" name="celular" placeholder="Su teléfono de celular.." value="'.$celular.'"><span class="error"> * '.$celularErr.'</span>
+				</div>
+				<div class="w3-third">
+					<label for="doctorEmail">Correo electrónico</label>
+					<input type="text" id="doctorEmail" name="doctorEmail" placeholder="Su correo electrónico.." value="'.$doctorEmail.'"><span class="error"> * '.$emailErr.'</span>
+				</div>
+					<!--<input type="hidden" name="action" value="updateMedico" />-->
+					<input class="w3-button w3-teal w3-padding-large w3-hover-black" type="submit" value="Actualizar" name="submit">
+			</form>
+		</div>';
 }
 
 function showProtocolosForm() {
@@ -333,7 +350,7 @@ function showProtocolosForm() {
 					<div class="w3-row-padding" style="margin:8 -16px">
 						<form action="/action_page.php">
 							<div class="w3-third">
-								<label for="doctroName">Nombre del protocolo</label>
+								<label for="protocoloName">Nombre del protocolo</label>
 								<input type="text" id="fname" name="firstname" placeholder="Nombre del protocolo..">
 							</div>
 							<div class="w3-row-padding" style="margin:8 -16px">    
@@ -354,7 +371,7 @@ function showProtocolosForm() {
 function showPacientesForm() {
 	echo '
 		<div id="page2" class="tarjeta w3-container w3-padding-large" style="margin-bottom:32px">
-			<div id="tarjetaProtocolos">	
+			<div id="tarjetaPacientes">	
 			  	<h4>Ingreso de pacientes</h4>
 				<div class="w3-container w3-whitegray">
 					<h2>Ingresar usuario</h2>
@@ -444,10 +461,10 @@ function showGuestUserForm() {
   	<body id="page" class="w3-light-grey w3-content" style="max-width:1600px">
   		<div class="container">
   		<div id="logo">
-  			<img src="imgs/logo.png">
+  			<img src="imgs/incmnsz.png">
   		</div>
   			<form class="form-signin" action="" method="post" accept-charset="utf-8">
-  				
+  			  <h2 class="form-signin-heading">Bienvenido</h2>
   				<input type="hidden" name="action" value="login" />
   				<input type="hidden" name="remember" value="0" />
   				<label for="inputEmail" class="sr-only">Correo electrónico</label>
@@ -692,6 +709,17 @@ function writeProtocoloTotalRegistros() {
 }
 
 // Medicos
+function editarMedico($medicoID) {
+	global $nameErr, $emailErr, $especialErr, $celularErr, $doctorName, $doctorEmail, $especialidad, $celular, $medicoID;
+	$data = getDataMedicos($medicoID);
+	foreach($data as $row) {
+    	$doctorName = $row['Nombre_medico'];
+    	$doctorEmail = $row['Email_medico'];
+    	$especialidad = $row['Especialidad'];
+    	$celular = $row['Cel_medico'];
+  	}
+}
+
 function writeMedicosDatos() {
 	$datos = getDataMedicos();
 	foreach($datosProtocolo as $row) {
@@ -700,8 +728,9 @@ function writeMedicosDatos() {
 }
 
 function writeMedicosTable() {
-	// Escribe la Tabla de Protocolo
-	$datos = getDataMedicos();
+	// Escribe la Tabla de Médicos
+	global $medicoID;
+	$datos = getDataMedicos($medicoID);
 	echo '
 		<table id="Medicos">';
 	foreach($datos as $row) {
@@ -712,12 +741,13 @@ function writeMedicosTable() {
 				<td>'.$row['Especialidad'].'</td>
 				<td>'.$row['Cel_medico'].'</td>
 				<td>'.$row['Email_medico'].'</td>
-				<td><a href=""><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a></td>
+				<td><a href="'.editarMedico($medicoID).'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a></td>
 			</tr>';
   	}
 	echo '
 		</table>';
 }
+
 /*
 // People
 function writePeopleDatos {

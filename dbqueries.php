@@ -14,7 +14,9 @@ require __DIR__.'/vendor/autoload.php';
 $db = new \PDO('mysql:dbname=rcpip;host=localhost;charset=utf8mb4', $dbuser_rcpip, $dbpass_rcpip);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
+/*
+// Procesa las variables del método POST de todos los formularios e ingreso al sistema
+***************************************************************************************/
 function processRequestData(\Delight\Auth\Auth $auth) {
 	if (isset($_POST)) {
 		if (isset($_POST['action'])) {
@@ -550,6 +552,24 @@ function processRequestData(\Delight\Auth\Auth $auth) {
 					return 'Username required';
 				}
 			}
+			// Agregando la acción para los formularios del Médico/administrador
+			else if ($_POST['action'] === 'addMedicos') {
+				try {
+					if (isset($_POST['medicosID'])) {
+						addMedicos($_POST['MedicosID'], $_POST['Nombre_medico'], $_POST['Especialidad'],$_POST['Cel_medico'], $_POST['Email_medico']);
+						echo "Medico ingresado";
+					}
+					else {
+						return "No hay entrada actual de MedicosID";
+						echo "No hay entrada MedicosID";
+					}
+				}
+				catch (PDOException $ex) {
+					return "Error al ingresar un nuevo Médico";
+					echo $ex->getMessage();
+					echo "error";
+				}
+			}
 			else {
 				throw new Exception('Unexpected action: ' . $_POST['action']);
 			}
@@ -571,10 +591,13 @@ function getDataProtocolo() {
 	return $stmt;
 }
 
-
-function getDataMedicos() {
+function getDataMedicos($medicosID) {
 	global $db;
-	$stmt = $db->query("SELECT * FROM Medicos");
+	if ($medicosID) {
+		$stmt = $db->query("SELECT * FROM Medicos WHERE medicosID='".$medicosID."'");
+	} else {
+		$stmt = $db->query("SELECT * FROM Medicos");
+	}
 	return $stmt;
 }
 
@@ -590,11 +613,22 @@ function getDataR24hrs() {
 	return $stmt;
 }
 
-function updateMedico() {
+function updateMedico($field1, $field2, $field3, $field4, $field5, $reg) {
 	global $db;
-	$affected_rows = $db->exec("UPDATE table SET field='value'");
+	$sql = "UPDATE `medicos` SET `MedicosID`='".$field1."',`Nombre_medico`='".$field2."',`Especialidad`='".$field3."',`Cel_medico`='".$field4."',`Email_medico`='".$field5."' WHERE ".$reg;
+	// Prepare statement
+	$stmt = $db->prepare($sql);
+	$stmt->execute();
+	$affected_rows = $stmt->rowCount()." registro actualizado exitosamente";
 	return $affected_rows;
 	//echo $affected_rows.' were affected'
 }
+
+function addMedico($field1,$field2,$field3,$field4,$field5) {
+	global $db;
+	$stmt = $db->prepare("INSERT INTO Medicos(Nombre_medico,Especialidad,Cel_medico,Email_medico) VALUES(:field1,:field2,:field3,:field4,:field5)");
+	$stmt->execute(array(':field1' => $field1, ':field2' => $field2, ':field3' => $field3, ':field4' => $field4, ':field5' => $field5));
+}
+
 
 ?>
